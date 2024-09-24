@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///C:/Program Files (x86)/Nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.95 scan initiated Mon Sep 23 21:32:53 2024 as: nmap.exe -sV -oX nmap-output -p 80,443 54.84.172.199 -->
+<nmaprun scanner="nmap" args="nmap.exe -sV -oX nmap-output -p 80,443 54.84.172.199" start="1727101973" startstr="Mon Sep 23 21:32:53 2024" version="7.95" xmloutputversion="1.05">
+<scaninfo type="syn" protocol="tcp" numservices="2" services="80,443"/>
+<verbose level="0"/>
+<debugging level="0"/>
+<hosthint><status state="up" reason="unknown-response" reason_ttl="0"/>
+<address addr="54.84.172.199" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+</hosthint>
+<host starttime="1727101977" endtime="1727102006"><status state="up" reason="syn-ack" reason_ttl="239"/>
+<address addr="54.84.172.199" addrtype="ipv4"/>
+<hostnames>
+<hostname name="ec2-54-84-172-199.compute-1.amazonaws.com" type="PTR"/>
+</hostnames>
+<ports><port protocol="tcp" portid="80"><state state="open" reason="syn-ack" reason_ttl="240"/><service name="http" product="nginx" method="probed" conf="10"><cpe>cpe:/a:igor_sysoev:nginx</cpe></service></port>
+<port protocol="tcp" portid="443"><state state="open" reason="syn-ack" reason_ttl="233"/><service name="http" product="nginx" tunnel="ssl" method="probed" conf="10"><cpe>cpe:/a:igor_sysoev:nginx</cpe></service></port>
+</ports>
+<times srtt="263750" rttvar="149437" to="861498"/>
+</host>
+<runstats><finished time="1727102006" timestr="Mon Sep 23 21:33:26 2024" summary="Nmap done at Mon Sep 23 21:33:26 2024; 1 IP address (1 host up) scanned in 32.71 seconds" elapsed="32.71" exit="success"/><hosts up="1" down="0" total="1"/>
+</runstats>
+</nmaprun>
