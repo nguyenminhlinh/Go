@@ -464,6 +464,7 @@
 // 	"fmt"
 // 	"os"
 // 	"sort"
+// 	"strings"
 // )
 
 // // Hàm đọc tệp và trả về một map với các dòng duy nhất
@@ -487,6 +488,34 @@
 
 // 	return set, nil
 // }
+// func readFileToSet1(filename string) (map[string]struct{}, error) {
+// 	file, err := os.Open(filename)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	defer file.Close()
+
+// 	set := make(map[string]struct{})
+// 	scanner := bufio.NewScanner(file)
+// 	for scanner.Scan() {
+// 		line := scanner.Text()
+// 		// Tìm vị trí của ký tự 'a'
+// 		start := strings.Index(line, "http")
+
+// 		// Kiểm tra nếu tìm thấy 'a'
+// 		// Lấy chuỗi từ vị trí 'a' đến hết
+// 		result := line[start:]
+// 		result1 := result[:len(result)-2]
+
+// 		set[result1] = struct{}{}
+// 	}
+
+// 	if err := scanner.Err(); err != nil {
+// 		return nil, err
+// 	}
+
+// 	return set, nil
+// }
 
 // // Hàm so sánh 2 tệp và in ra các dòng chỉ có trong tệp 1
 // func compareFiles(file1, file2 string) error {
@@ -495,7 +524,7 @@
 // 		return err
 // 	}
 
-// 	set2, err := readFileToSet(file2)
+// 	set2, err := readFileToSet1(file2)
 // 	if err != nil {
 // 		return err
 // 	}
@@ -1361,194 +1390,801 @@
 // 	}
 // }
 
-package main
+// package main
 
-import (
-	"encoding/xml"
-	"fmt"
-	"io"
-	"os"
-	"path/filepath"
-	"strings"
-)
+// import (
+// 	"encoding/xml"
+// 	"fmt"
+// 	"io"
+// 	"os"
+// 	"path/filepath"
+// 	"strings"
+// )
 
-func ReadFilesSimple(file string) string {
-	// Mở file để đọc
-	inputFile, err := os.Open(file)
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return ""
-	}
-	defer inputFile.Close()
+// func ReadFilesSimple(file string) string {
+// 	// Mở file để đọc
+// 	inputFile, err := os.Open(file)
+// 	if err != nil {
+// 		fmt.Println("Error opening file:", err)
+// 		return ""
+// 	}
+// 	defer inputFile.Close()
 
-	// Đọc toàn bộ nội dung file vào biến
-	content, err := io.ReadAll(inputFile)
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-		return ""
-	}
-	return string(content)
-}
-func Getwd() string {
-	cwd, err := os.Getwd()
-	if err != nil {
-		fmt.Println("Error getting current working directory:", err)
-		return ""
-	}
-	return filepath.ToSlash(cwd)
-}
+// 	// Đọc toàn bộ nội dung file vào biến
+// 	content, err := io.ReadAll(inputFile)
+// 	if err != nil {
+// 		fmt.Println("Error reading file:", err)
+// 		return ""
+// 	}
+// 	return string(content)
+// }
+// func Getwd() string {
+// 	cwd, err := os.Getwd()
+// 	if err != nil {
+// 		fmt.Println("Error getting current working directory:", err)
+// 		return ""
+// 	}
+// 	return filepath.ToSlash(cwd)
+// }
 
-type OsMatch struct {
-	Name     string `xml:"name,attr"`
-	Accuracy string `xml:"accuracy,attr"`
-}
-type OsClass struct {
-	Type string `xml:"type,attr"`
-}
-type Port struct {
-	Protocol string  `xml:"protocol,attr"`
-	PortID   string  `xml:"portid,attr"`
-	State    State   `xml:"state"`
-	Service  Service `xml:"service"`
-}
+// type OsMatch struct {
+// 	Name     string `xml:"name,attr"`
+// 	Accuracy string `xml:"accuracy,attr"`
+// }
+// type OsClass struct {
+// 	Type string `xml:"type,attr"`
+// }
+// type Port struct {
+// 	Protocol string  `xml:"protocol,attr"`
+// 	PortID   string  `xml:"portid,attr"`
+// 	State    State   `xml:"state"`
+// 	Service  Service `xml:"service"`
+// }
 
-type State struct {
-	State string `xml:"state,attr"`
-}
+// type State struct {
+// 	State string `xml:"state,attr"`
+// }
 
-type Service struct {
-	Name    string `xml:"name,attr"`
-	Tunnel  string `xml:"tunnel,attr"`
-	Product string `xml:"product,attr"`
-	Version string `xml:"version,attr"`
-}
+// type Service struct {
+// 	Name    string `xml:"name,attr"`
+// 	Tunnel  string `xml:"tunnel,attr"`
+// 	Product string `xml:"product,attr"`
+// 	Version string `xml:"version,attr"`
+// }
 
-func main() {
-	// ctx, cancel := context.WithCancel(context.Background())
-	// defer cancel()
-	// //workDirectory := Getwd()
-	// var scanPortAndService string
-	// var ports []*port.Port
-	// options := runner.Options{
-	// 	Host:     goflags.StringSlice{"hackerone.com"},
-	// 	ScanType: "s",
-	// 	TopPorts: "1000",
-	// 	Nmap:     true,
-	// 	NmapCLI:  "nmap -O -sV",
-	// 	Silent:   true,
-	// 	OnResult: func(hr *result.HostResult) {
-	// 		// fmt.Println(hr.Host, hr.Ports)
-	// 		ports = hr.Ports
-	// 	},
-	// }
-	// fmt.Println(ports)
-	// naabuRunner, err := runner.NewRunner(&options)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// defer naabuRunner.Close()
+// func main() {
+// 	// ctx, cancel := context.WithCancel(context.Background())
+// 	// defer cancel()
+// 	// //workDirectory := Getwd()
+// 	// var scanPortAndService string
+// 	// var ports []*port.Port
+// 	// options := runner.Options{
+// 	// 	Host:     goflags.StringSlice{"hackerone.com"},
+// 	// 	ScanType: "s",
+// 	// 	TopPorts: "1000",
+// 	// 	Nmap:     true,
+// 	// 	NmapCLI:  "nmap -O -sV",
+// 	// 	Silent:   true,
+// 	// 	OnResult: func(hr *result.HostResult) {
+// 	// 		// fmt.Println(hr.Host, hr.Ports)
+// 	// 		ports = hr.Ports
+// 	// 	},
+// 	// }
+// 	// fmt.Println(ports)
+// 	// naabuRunner, err := runner.NewRunner(&options)
+// 	// if err != nil {
+// 	// 	log.Fatal(err)
+// 	// }
+// 	// defer naabuRunner.Close()
 
-	// naabuRunner.RunEnumeration(ctx, &scanPortAndService)
-	// fmt.Println(numberhPort)
-	output := ReadFilesSimple("C:\\Users\\minhl\\recon\\src\\linh4.txt")
-	instances := strings.TrimSpace(output)
+// 	// naabuRunner.RunEnumeration(ctx, &scanPortAndService)
+// 	// fmt.Println(numberhPort)
+// 	output := ReadFilesSimple("C:\\Users\\minhl\\recon\\src\\linh4.txt")
+// 	instances := strings.TrimSpace(output)
 
-	if instances != "" {
-		//Get os
-		flagCopyPort := false
-		for _, instance := range strings.Split(instances, "\r\n") {
-			instance = strings.TrimSpace(instance)
-			if strings.Contains(instance, "<port protocol") {
-				// fmt.Println("*", instance, "*")
-				var port Port
-				err := xml.Unmarshal([]byte(instance), &port)
-				if err != nil {
-					fmt.Println("Error:", err)
-					return
-				}
-				service := ""
-				if port.Service.Tunnel != "" {
-					service = port.Service.Tunnel + "/" + port.Service.Name
-				} else {
-					service = port.Service.Name
-				}
-				fmt.Println("Port:", port.PortID+"/"+port.Protocol, "State:", port.State.State, "Service:", service, "Version:", port.Service.Product+" "+port.Service.Version)
-			}
-			var osMatch OsMatch
-			if strings.Contains(instance, "<osmatch") {
-				instance = instance + "</osmatch>"
+// 	if instances != "" {
+// 		//Get os
+// 		flagCopyPort := false
+// 		for _, instance := range strings.Split(instances, "\r\n") {
+// 			instance = strings.TrimSpace(instance)
+// 			if strings.Contains(instance, "<port protocol") {
+// 				// fmt.Println("*", instance, "*")
+// 				var port Port
+// 				err := xml.Unmarshal([]byte(instance), &port)
+// 				if err != nil {
+// 					fmt.Println("Error:", err)
+// 					return
+// 				}
+// 				service := ""
+// 				if port.Service.Tunnel != "" {
+// 					service = port.Service.Tunnel + "/" + port.Service.Name
+// 				} else {
+// 					service = port.Service.Name
+// 				}
+// 				fmt.Println("Port:", port.PortID+"/"+port.Protocol, "State:", port.State.State, "Service:", service, "Version:", port.Service.Product+" "+port.Service.Version)
+// 			}
+// 			var osMatch OsMatch
+// 			if strings.Contains(instance, "<osmatch") {
+// 				instance = instance + "</osmatch>"
 
-				// Giải mã XML
-				err := xml.Unmarshal([]byte(instance), &osMatch)
-				if err != nil {
-					fmt.Println("Lỗi khi giải mã XML:", err)
-					return
-				}
-				fmt.Println("Name:", osMatch.Name+" ("+osMatch.Accuracy+")")
-				flagCopyPort = true
-			}
-			if strings.Contains(instance, "<osclass") && flagCopyPort {
-				var osClass OsClass
-				// Giải mã XML
-				err := xml.Unmarshal([]byte(instance), &osClass)
-				if err != nil {
-					fmt.Println("Lỗi khi giải mã XML:", err)
-					return
-				}
-				fmt.Println("Devicetype::", osClass.Type)
-				flagCopyPort = false
-			}
+// 				// Giải mã XML
+// 				err := xml.Unmarshal([]byte(instance), &osMatch)
+// 				if err != nil {
+// 					fmt.Println("Lỗi khi giải mã XML:", err)
+// 					return
+// 				}
+// 				fmt.Println("Name:", osMatch.Name+" ("+osMatch.Accuracy+")")
+// 				flagCopyPort = true
+// 			}
+// 			if strings.Contains(instance, "<osclass") && flagCopyPort {
+// 				var osClass OsClass
+// 				// Giải mã XML
+// 				err := xml.Unmarshal([]byte(instance), &osClass)
+// 				if err != nil {
+// 					fmt.Println("Lỗi khi giải mã XML:", err)
+// 					return
+// 				}
+// 				fmt.Println("Devicetype::", osClass.Type)
+// 				flagCopyPort = false
+// 			}
 
-		}
-	}
-}
+// 		}
+// 	}
+// }
+
+// // package main
+
+// // import (
+// // 	"fmt"
+// // 	"net"
+
+// // 	"github.com/projectdiscovery/cdncheck"
+// // )
+
+// // func main() {
+// // 	client := cdncheck.New()
+// // 	ip := net.ParseIP("185.199.108.153")
+
+// // 	// checks if an IP is contained in the cdn denylist
+// // 	matched, val, err := client.CheckCDN(ip)
+// // 	if err != nil {
+// // 		panic(err)
+// // 	}
+
+// // 	if matched {
+// // 		fmt.Printf("%v is a %v\n", ip, val)
+// // 	} else {
+// // 		fmt.Printf("%v is not a CDN\n", ip)
+// // 	}
+
+// // 	// checks if an IP is contained in the cloud denylist
+// // 	matched, val, err = client.CheckCloud(ip)
+// // 	if err != nil {
+// // 		panic(err)
+// // 	}
+
+// // 	if matched {
+// // 		fmt.Printf("%v is a %v\n", ip, val)
+// // 	} else {
+// // 		fmt.Printf("%v is not a Cloud\n", ip)
+// // 	}
+
+// // 	// checks if an IP is contained in the waf denylist
+// // 	matched, val, err = client.CheckWAF(ip)
+// // 	if err != nil {
+// // 		panic(err)
+// // 	}
+
+// // 	if matched {
+// // 		fmt.Printf("%v WAF is %v\n", ip, val)
+// // 	} else {
+// // 		fmt.Printf("%v is not a WAF\n", ip)
+// // 	}
+// // }
+// package main
+
+// import (
+// 	"bufio"
+// 	"encoding/json"
+// 	"flag"
+// 	"fmt"
+// 	"io/ioutil"
+// 	"net/http"
+// 	"net/url"
+// 	"os"
+// 	"strings"
+// 	"sync"
+// 	"time"
+// )
+
+// func main() {
+
+// 	var domains []string
+
+// 	var dates bool
+// 	flag.BoolVar(&dates, "dates", false, "show date of fetch in the first column")
+
+// 	var noSubs bool
+// 	flag.BoolVar(&noSubs, "no-subs", false, "don't include subdomains of the target domain")
+
+// 	var getVersionsFlag bool
+// 	flag.BoolVar(&getVersionsFlag, "get-versions", false, "list URLs for crawled versions of input URL(s)")
+
+// 	flag.Parse()
+
+// 	if flag.NArg() > 0 {
+// 		// fetch for a single domain
+// 		domains = []string{flag.Arg(0)}
+// 	} else {
+
+// 		// fetch for all domains from stdin
+// 		sc := bufio.NewScanner(os.Stdin)
+// 		for sc.Scan() {
+// 			domains = append(domains, sc.Text())
+// 		}
+
+// 		if err := sc.Err(); err != nil {
+// 			fmt.Fprintf(os.Stderr, "failed to read input: %s\n", err)
+// 		}
+// 	}
+
+// 	// get-versions mode
+// 	if getVersionsFlag {
+
+// 		for _, u := range domains {
+// 			versions, err := getVersions(u)
+// 			if err != nil {
+// 				continue
+// 			}
+// 			fmt.Println(strings.Join(versions, "\n"))
+// 		}
+
+// 		return
+// 	}
+
+// 	fetchFns := []fetchFn{
+// 		getWaybackURLs,
+// 		getCommonCrawlURLs,
+// 		getVirusTotalURLs,
+// 	}
+
+// 	for _, domain := range domains {
+
+// 		var wg sync.WaitGroup
+// 		wurls := make(chan wurl)
+
+// 		for _, fn := range fetchFns {
+// 			wg.Add(1)
+// 			fetch := fn
+// 			go func() {
+// 				defer wg.Done()
+// 				resp, err := fetch(domain, noSubs)
+// 				if err != nil {
+// 					return
+// 				}
+// 				for _, r := range resp {
+// 					if noSubs && isSubdomain(r.url, domain) {
+// 						continue
+// 					}
+// 					wurls <- r
+// 				}
+// 			}()
+// 		}
+
+// 		go func() {
+// 			wg.Wait()
+// 			close(wurls)
+// 		}()
+
+// 		seen := make(map[string]bool)
+// 		for w := range wurls {
+// 			if _, ok := seen[w.url]; ok {
+// 				continue
+// 			}
+// 			seen[w.url] = true
+
+// 			if dates {
+
+// 				d, err := time.Parse("20060102150405", w.date)
+// 				if err != nil {
+// 					fmt.Fprintf(os.Stderr, "failed to parse date [%s] for URL [%s]\n", w.date, w.url)
+// 				}
+
+// 				fmt.Printf("%s %s\n", d.Format(time.RFC3339), w.url)
+
+// 			} else {
+// 				fmt.Println(w.url)
+// 			}
+// 		}
+// 	}
+
+// }
+
+// type wurl struct {
+// 	date string
+// 	url  string
+// }
+
+// type fetchFn func(string, bool) ([]wurl, error)
+
+// func getWaybackURLs(domain string, noSubs bool) ([]wurl, error) {
+// 	subsWildcard := "*."
+// 	if noSubs {
+// 		subsWildcard = ""
+// 	}
+
+// 	res, err := http.Get(
+// 		fmt.Sprintf("http://web.archive.org/cdx/search/cdx?url=%s%s/*&output=json&collapse=urlkey", subsWildcard, domain),
+// 	)
+// 	if err != nil {
+// 		fmt.Println("endgetWaybackURLs")
+// 		return []wurl{}, err
+// 	}
+
+// 	raw, err := ioutil.ReadAll(res.Body)
+
+// 	res.Body.Close()
+// 	if err != nil {
+// 		fmt.Println("end1getWaybackURLs")
+// 		return []wurl{}, err
+// 	}
+
+// 	var wrapper [][]string
+// 	err = json.Unmarshal(raw, &wrapper)
+
+// 	out := make([]wurl, 0, len(wrapper))
+
+// 	skip := true
+// 	for _, urls := range wrapper {
+// 		// The first item is always just the string "original",
+// 		// so we should skip the first item
+// 		if skip {
+// 			skip = false
+// 			continue
+// 		}
+// 		out = append(out, wurl{date: urls[1], url: urls[2]})
+// 	}
+// 	fmt.Println("getWaybackURLs", len(out))
+// 	return out, nil
+
+// }
+
+// func getCommonCrawlURLs(domain string, noSubs bool) ([]wurl, error) {
+// 	subsWildcard := "*."
+// 	if noSubs {
+// 		subsWildcard = ""
+// 	}
+
+// 	res, err := http.Get(
+// 		fmt.Sprintf("http://index.commoncrawl.org/CC-MAIN-2018-22-index?url=%s%s/*&output=json", subsWildcard, domain),
+// 	)
+// 	if err != nil {
+// 		fmt.Println("endgetCommonCrawlURLs")
+// 		return []wurl{}, err
+// 	}
+
+// 	defer res.Body.Close()
+// 	sc := bufio.NewScanner(res.Body)
+
+// 	out := make([]wurl, 0)
+
+// 	for sc.Scan() {
+
+// 		wrapper := struct {
+// 			URL       string `json:"url"`
+// 			Timestamp string `json:"timestamp"`
+// 		}{}
+// 		err = json.Unmarshal([]byte(sc.Text()), &wrapper)
+
+// 		if err != nil {
+// 			continue
+// 		}
+
+// 		out = append(out, wurl{date: wrapper.Timestamp, url: wrapper.URL})
+// 	}
+// 	fmt.Println("getCommonCrawlURLs", len(out))
+// 	return out, nil
+
+// }
+
+// func getVirusTotalURLs(domain string, noSubs bool) ([]wurl, error) {
+// 	out := make([]wurl, 0)
+
+// 	apiKey := os.Getenv("VT_API_KEY")
+// 	if apiKey == "" {
+// 		// no API key isn't an error,
+// 		// just don't fetch
+// 		fmt.Println("endgetVirusTotalURLs")
+// 		return out, nil
+// 	}
+
+// 	fetchURL := fmt.Sprintf(
+// 		"https://www.virustotal.com/vtapi/v2/domain/report?apikey=%s&domain=%s",
+// 		apiKey,
+// 		domain,
+// 	)
+
+// 	resp, err := http.Get(fetchURL)
+// 	if err != nil {
+// 		fmt.Println("endgetVirusTotalURLs1")
+// 		return out, err
+// 	}
+// 	defer resp.Body.Close()
+
+// 	wrapper := struct {
+// 		URLs []struct {
+// 			URL string `json:"url"`
+// 			// TODO: handle VT date format (2018-03-26 09:22:43)
+// 			//Date string `json:"scan_date"`
+// 		} `json:"detected_urls"`
+// 	}{}
+
+// 	dec := json.NewDecoder(resp.Body)
+
+// 	err = dec.Decode(&wrapper)
+
+// 	for _, u := range wrapper.URLs {
+// 		out = append(out, wurl{url: u.URL})
+// 	}
+// 	fmt.Println("getVirusTotalURLs", len(out))
+// 	return out, nil
+
+// }
+
+// func isSubdomain(rawUrl, domain string) bool {
+// 	u, err := url.Parse(rawUrl)
+// 	if err != nil {
+// 		// we can't parse the URL so just
+// 		// err on the side of including it in output
+// 		return false
+// 	}
+
+// 	return strings.ToLower(u.Hostname()) != strings.ToLower(domain)
+// }
+
+// func getVersions(u string) ([]string, error) {
+// 	out := make([]string, 0)
+
+// 	resp, err := http.Get(fmt.Sprintf(
+// 		"http://web.archive.org/cdx/search/cdx?url=%s&output=json", u,
+// 	))
+
+// 	if err != nil {
+// 		return out, err
+// 	}
+// 	defer resp.Body.Close()
+
+// 	r := [][]string{}
+
+// 	dec := json.NewDecoder(resp.Body)
+
+// 	err = dec.Decode(&r)
+// 	if err != nil {
+// 		return out, err
+// 	}
+
+// 	first := true
+// 	seen := make(map[string]bool)
+// 	for _, s := range r {
+
+// 		// skip the first element, it's the field names
+// 		if first {
+// 			first = false
+// 			continue
+// 		}
+
+// 		// fields: "urlkey", "timestamp", "original", "mimetype", "statuscode", "digest", "length"
+// 		if seen[s[5]] {
+// 			continue
+// 		}
+// 		seen[s[5]] = true
+// 		out = append(out, fmt.Sprintf("https://web.archive.org/web/%sif_/%s", s[1], s[2]))
+// 	}
+
+// 	return out, nil
+// }
 
 // package main
 
 // import (
 // 	"fmt"
-// 	"net"
-
-// 	"github.com/projectdiscovery/cdncheck"
+// 	"os/exec"
 // )
 
 // func main() {
-// 	client := cdncheck.New()
-// 	ip := net.ParseIP("185.199.108.153")
+// 	// Domain mà bạn muốn kiểm tra
+// 	domain := "https://dichvucong.gov.vn"
 
-// 	// checks if an IP is contained in the cdn denylist
-// 	matched, val, err := client.CheckCDN(ip)
+// 	// Tạo lệnh để chạy file Python
+// 	cmd := exec.Command("python", "wafw00f_scan.py ", domain)
+
+// 	// Chạy lệnh và lấy output
+// 	output, err := cmd.CombinedOutput()
+// 	if err != nil {
+// 		fmt.Printf("Error running Python script: %v\n", err)
+// 		return
+// 	}
+
+//		// In kết quả từ file Python
+//		fmt.Printf("WAF detection result for %s:\n%s\n", domain, string(output))
+//	}
+// package main
+
+// import (
+// 	"context"
+
+// 	nuclei "github.com/projectdiscovery/nuclei/v3/lib"
+// 	"github.com/projectdiscovery/nuclei/v3/pkg/installer"
+// 	syncutil "github.com/projectdiscovery/utils/sync"
+// )
+
+// func main() {
+// 	ctx := context.Background()
+// 	// when running nuclei in parallel for first time it is a good practice to make sure
+// 	// templates exists first
+// 	tm := installer.TemplateManager{}
+// 	if err := tm.FreshInstallIfNotExists(); err != nil {
+// 		panic(err)
+// 	}
+
+// 	// create nuclei engine with options
+// 	ne, err := nuclei.NewThreadSafeNucleiEngineCtx(ctx)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	// setup sizedWaitgroup to handle concurrency
+// 	sg, err := syncutil.New(syncutil.WithSize(10))
 // 	if err != nil {
 // 		panic(err)
 // 	}
 
-// 	if matched {
-// 		fmt.Printf("%v is a %v\n", ip, val)
-// 	} else {
-// 		fmt.Printf("%v is not a CDN\n", ip)
-// 	}
+// 	// scan 1 = run dns templates on scanme.sh
+// 	sg.Add()
+// 	go func() {
+// 		defer sg.Done()
+// 		err = ne.ExecuteNucleiWithOpts([]string{"scanme.sh"},
+// 			nuclei.WithTemplateFilters(nuclei.TemplateFilters{ProtocolTypes: "dns"}),
+// 			nuclei.WithHeaders([]string{"X-Bug-Bounty: pdteam"}),
+// 			nuclei.EnablePassiveMode(),
+// 		)
+// 		if err != nil {
+// 			panic(err)
+// 		}
+// 	}()
 
-// 	// checks if an IP is contained in the cloud denylist
-// 	matched, val, err = client.CheckCloud(ip)
-// 	if err != nil {
-// 		panic(err)
-// 	}
+// 	// scan 2 = run templates with oast tags on honey.scanme.sh
+// 	sg.Add()
+// 	go func() {
+// 		defer sg.Done()
+// 		err = ne.ExecuteNucleiWithOpts([]string{"http://honey.scanme.sh"}, nuclei.WithTemplateFilters(nuclei.TemplateFilters{Tags: []string{"oast"}}))
+// 		if err != nil {
+// 			panic(err)
+// 		}
+// 	}()
 
-// 	if matched {
-// 		fmt.Printf("%v is a %v\n", ip, val)
-// 	} else {
-// 		fmt.Printf("%v is not a Cloud\n", ip)
-// 	}
+// 	// wait for all scans to finish
+// 	sg.Wait()
+// 	defer ne.Close()
 
-// 	// checks if an IP is contained in the waf denylist
-// 	matched, val, err = client.CheckWAF(ip)
-// 	if err != nil {
-// 		panic(err)
-// 	}
+//		// Output:
+//		// [dns-saas-service-detection] scanme.sh
+//		// [nameserver-fingerprint] scanme.sh
+//		// [dns-saas-service-detection] honey.scanme.sh
+//	}
+// package main
 
-// 	if matched {
-// 		fmt.Printf("%v WAF is %v\n", ip, val)
-// 	} else {
-// 		fmt.Printf("%v is not a WAF\n", ip)
+// import (
+// 	"fmt"
+// 	"sync"
+// 	"time"
+// )
+
+// var contstt int
+
+// func checkDomain() {
+// 	for i := 1; i <= 10; i++ {
+// 		// Sử dụng \r để đưa con trỏ về đầu dòng và ghi đè số mới
+// 		fmt.Printf("\rStt: %d", i)
+// 		time.Sleep(1 * time.Second) // Giả lập việc xử lý (1 giây)
+// 	}
+// 	fmt.Println() // Xuống dòng sau khi hoàn thành
+// }
+
+// func main() {
+// 	var wg sync.WaitGroup
+// 	wg.Add(1)
+
+// 	go func() {
+// 		defer wg.Done()
+// 		checkDomain()
+// 	}()
+
+//		wg.Wait()
+//	}
+// package main
+
+// import (
+// 	"context"
+// 	"log"
+// 	"sync"
+
+// 	"github.com/projectdiscovery/goflags"
+// 	"github.com/projectdiscovery/naabu/v2/pkg/result"
+// 	"github.com/projectdiscovery/naabu/v2/pkg/runner"
+// )
+
+// func main() {
+// 	var wg sync.WaitGroup
+// 	ctx, cancel := context.WithCancel(context.Background())
+// 	linh := []string{"cms.gumac.vn", "hrv.gumac.vn", "missgu.gumac.vn", "online.gumac.vn", "crm.gumac.vn", "quanly2.gumac.vn", "cdn.gumac.vn", "bungnosinhnhat.gumac.vn", "www.gumac.vn", "quanly.gumac.vn"}
+// 	defer cancel()
+// 	for i := 0; i < 10; i++ {
+// 		wg.Add(1)
+// 		go func(domain string) {
+// 			options := runner.Options{
+// 				Host:     goflags.StringSlice{domain},
+// 				ScanType: "s",
+// 				TopPorts: "1000",
+// 				Silent:   true,
+// 				OnResult: func(hr *result.HostResult) {
+// 					log.Println(hr.Host, hr.Ports)
+// 				},
+// 			}
+
+// 			naabuRunner, err := runner.NewRunner(&options)
+// 			if err != nil {
+// 				log.Fatal(err)
+// 			}
+// 			defer naabuRunner.Close()
+
+// 			naabuRunner.RunEnumeration(ctx)
+// 			wg.Done()
+// 		}(linh[i])
+// 	}
+// 	wg.Wait()
+
+// }
+// package main
+
+// import (
+// 	"fmt"
+// 	"log"
+// 	"time"
+
+// 	"github.com/miekg/dns"
+// )
+
+// // List of DNS servers to test
+// var dnsServers = []string{
+// 	"8.8.8.8:53",        // Google DNS
+// 	"8.8.4.4:53",        // Google DNS
+// 	"1.1.1.1:53",        // Cloudflare DNS
+// 	"9.9.9.9:53",        // Quad9 DNS
+// 	"208.67.222.222:53", // OpenDNS
+// }
+
+// func main() {
+// 	domain := "google.com" // Domain to query
+
+// 	for _, server := range dnsServers {
+// 		start := time.Now()
+// 		response, err := queryDNS(server, domain)
+// 		if err != nil {
+// 			log.Printf("Error querying %s: %v\n", server, err)
+// 			continue
+// 		}
+// 		duration := time.Since(start)
+// 		fmt.Printf("Response from %s in %v: %d answers\n", server, duration, len(response))
 // 	}
 // }
+
+// // queryDNS sends a DNS query to the specified server for the given domain
+// func queryDNS(server, domain string) ([]dns.RR, error) {
+// 	msg := new(dns.Msg)
+// 	msg.SetQuestion(dns.Fqdn(domain), dns.TypeA) // Query for A records
+// 	msg.RecursionDesired = true
+
+// 	client := new(dns.Client)
+// 	client.Timeout = 5 * time.Second
+
+// 	response, _, err := client.Exchange(msg, server)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+//		return response.Answer, nil
+//	}
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"os"
+)
+
+// Cấu trúc dữ liệu InfoWeb, InfoSubDomain, InfoDomain giống với file JSON của bạn
+type InfoWeb struct {
+	TechnologyDetails map[string]interface{} `json:"technologydetails"`
+	FireWall          string                 `json:"firewall"`
+	Status            string                 `json:"status"`
+	Title             string                 `json:"title"`
+}
+
+type InfoSubDomain struct {
+	NameSubDomain  string             `json:"namesubdomain"`
+	Country        string             `json:"country"`
+	Ips            []string           `json:"ips"`
+	PortAndService map[string]string  `json:"portsandservice"`
+	Os             []string           `json:"os"`
+	HttpOrHttps    map[string]InfoWeb `json:"httporhttps"`
+	CName          []string           `json:"cname"`
+}
+
+type InfoDomain struct {
+	MXRecords  []string                 `json:"mxrecords"`
+	NSRecords  []string                 `json:"nsrecords"`
+	SOARecords []string                 `json:"soarecords"`
+	TXTRecords []string                 `json:"txtrecords"`
+	SubDomain  map[string]InfoSubDomain `json:"subdomain"`
+}
+
+var ListDomain map[string]InfoDomain
+
+// Hàm để đọc file JSON
+func loadJSONFile(fileName string) error {
+	// Đọc file JSON
+	jsonFile, err := os.Open(fileName)
+	if err != nil {
+		return fmt.Errorf("lỗi mở file: %v", err)
+	}
+	defer jsonFile.Close()
+
+	// Đọc nội dung file
+	byteValue, err := io.ReadAll(jsonFile)
+	if err != nil {
+		return fmt.Errorf("lỗi đọc file: %v", err)
+	}
+
+	// Giải mã dữ liệu JSON thành map
+	err = json.Unmarshal(byteValue, &ListDomain)
+	if err != nil {
+		return fmt.Errorf("lỗi giải mã JSON: %v", err)
+	}
+
+	return nil
+}
+
+// Handler cho endpoint trả về dữ liệu JSON
+func jsonHandler(w http.ResponseWriter, r *http.Request) {
+	// Thiết lập header cho response
+	w.Header().Set("Content-Type", "application/json")
+
+	// Chuyển dữ liệu ListDomain sang JSON
+	jsonData, err := json.MarshalIndent(ListDomain, "", "  ")
+	if err != nil {
+		http.Error(w, "Không thể chuyển dữ liệu sang JSON", http.StatusInternalServerError)
+		return
+	}
+
+	// Gửi dữ liệu JSON về client
+	w.Write(jsonData)
+}
+
+func main() {
+	// Đọc file JSON "linh.json"
+	err := loadJSONFile("list_domain.json")
+	if err != nil {
+		log.Fatalf("Lỗi tải file JSON: %v", err)
+	}
+
+	// Khởi tạo HTTP server ở cổng 8080
+	http.HandleFunc("/data", jsonHandler)
+
+	fmt.Println("Server chạy tại http://localhost:8080/data")
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatalf("Không thể khởi chạy server: %v", err)
+	}
+}
