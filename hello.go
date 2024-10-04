@@ -2094,97 +2094,227 @@
 
 //		return response.Answer, nil
 //	}
+// package main
+
+// import (
+// 	"encoding/json"
+// 	"fmt"
+// 	"io"
+// 	"log"
+// 	"net/http"
+// 	"os"
+// )
+
+// // Cấu trúc dữ liệu InfoWeb, InfoSubDomain, InfoDomain giống với file JSON của bạn
+// type InfoWeb struct {
+// 	TechnologyDetails map[string]interface{} `json:"technologydetails"`
+// 	FireWall          string                 `json:"firewall"`
+// 	Status            string                 `json:"status"`
+// 	Title             string                 `json:"title"`
+// }
+
+// type InfoSubDomain struct {
+// 	NameSubDomain  string             `json:"namesubdomain"`
+// 	Country        string             `json:"country"`
+// 	Ips            []string           `json:"ips"`
+// 	PortAndService map[string]string  `json:"portsandservice"`
+// 	Os             []string           `json:"os"`
+// 	HttpOrHttps    map[string]InfoWeb `json:"httporhttps"`
+// 	CName          []string           `json:"cname"`
+// }
+
+// type InfoDomain struct {
+// 	MXRecords  []string                 `json:"mxrecords"`
+// 	NSRecords  []string                 `json:"nsrecords"`
+// 	SOARecords []string                 `json:"soarecords"`
+// 	TXTRecords []string                 `json:"txtrecords"`
+// 	SubDomain  map[string]InfoSubDomain `json:"subdomain"`
+// }
+
+// var ListDomain map[string]InfoDomain
+
+// // Hàm để đọc file JSON
+// func loadJSONFile(fileName string) error {
+// 	// Đọc file JSON
+// 	jsonFile, err := os.Open(fileName)
+// 	if err != nil {
+// 		return fmt.Errorf("lỗi mở file: %v", err)
+// 	}
+// 	defer jsonFile.Close()
+
+// 	// Đọc nội dung file
+// 	byteValue, err := io.ReadAll(jsonFile)
+// 	if err != nil {
+// 		return fmt.Errorf("lỗi đọc file: %v", err)
+// 	}
+
+// 	// Giải mã dữ liệu JSON thành map
+// 	err = json.Unmarshal(byteValue, &ListDomain)
+// 	if err != nil {
+// 		return fmt.Errorf("lỗi giải mã JSON: %v", err)
+// 	}
+
+// 	return nil
+// }
+
+// // Handler cho endpoint trả về dữ liệu JSON
+// func jsonHandler(w http.ResponseWriter, r *http.Request) {
+// 	// Thiết lập header cho response
+// 	w.Header().Set("Content-Type", "application/json")
+
+// 	// Chuyển dữ liệu ListDomain sang JSON
+// 	jsonData, err := json.MarshalIndent(ListDomain, "", "  ")
+// 	if err != nil {
+// 		http.Error(w, "Không thể chuyển dữ liệu sang JSON", http.StatusInternalServerError)
+// 		return
+// 	}
+
+// 	// Gửi dữ liệu JSON về client
+// 	w.Write(jsonData)
+// }
+
+// func main() {
+// 	// Đọc file JSON "linh.json"
+// 	err := loadJSONFile("list_domain.json")
+// 	if err != nil {
+// 		log.Fatalf("Lỗi tải file JSON: %v", err)
+// 	}
+
+// 	// Khởi tạo HTTP server ở cổng 8080
+// 	http.HandleFunc("/data", jsonHandler)
+
+//		fmt.Println("Server chạy tại http://localhost:8080/data")
+//		if err := http.ListenAndServe(":8080", nil); err != nil {
+//			log.Fatalf("Không thể khởi chạy server: %v", err)
+//		}
+//	}
+// package main
+
+// import (
+// 	"fmt"
+// 	"io"
+// 	"net/http"
+// )
+
+// func LengthResponse(domain string, host string) (int, bool) {
+// 	var flaghttp = false
+
+// 	// Tạo yêu cầu cho HTTPS
+// 	reqhttps, err := http.NewRequest("GET", "https://"+domain, nil)
+// 	if err != nil {
+// 		fmt.Println("Error creating request for HTTPS:", err)
+// 		return 0, false
+// 	}
+// 	reqhttps.Host = host
+
+// 	// Tạo yêu cầu cho HTTP
+// 	reqhttp, err := http.NewRequest("GET", "http://"+domain, nil)
+// 	if err != nil {
+// 		fmt.Println("Error creating request for HTTP:", err)
+// 		return 0, false
+// 	}
+// 	reqhttp.Host = host
+
+// 	client := &http.Client{}
+
+// 	// Gửi yêu cầu HTTPS
+// 	resp, err := client.Do(reqhttps)
+// 	if err == nil {
+// 		defer resp.Body.Close()
+// 		body, err := io.ReadAll(resp.Body)
+// 		if err != nil {
+// 			fmt.Println("Error reading HTTPS response body:", err)
+// 			return 0, false
+// 		}
+// 		return len(body), false // Không cần gửi HTTP nếu HTTPS thành công
+// 	} else {
+// 		flaghttp = true // Đánh dấu cần gửi HTTP nếu HTTPS thất bại
+// 	}
+
+// 	// Gửi yêu cầu HTTP nếu HTTPS không thành công
+// 	if flaghttp {
+// 		resp, err = client.Do(reqhttp)
+// 		if err != nil {
+// 			fmt.Println("Error sending request for HTTP:", err)
+// 			return 0, true
+// 		}
+// 		defer resp.Body.Close()
+
+// 		body, err := io.ReadAll(resp.Body)
+// 		if err != nil {
+// 			fmt.Println("Error reading HTTP response body:", err)
+// 			return 0, true
+// 		}
+
+// 		return len(body), true
+// 	}
+
+// 	return 0, false // Trả về 0 nếu cả hai yêu cầu đều không thành công
+// }
+
+// func main() {
+// 	length, flag := LengthResponse("hackerone.com", "abcdef.hackerone.com")
+// 	if flag {
+// 		fmt.Println("HTTP request was used, response length:", length)
+// 	} else {
+// 		fmt.Println("HTTPS request was successful, response length:", length)
+// 	}
+// }
+
+// package main
+
+// import (
+// 	"fmt"
+// 	"io"
+// 	"log"
+// 	"net/http"
+
+// 	wappalyzer "github.com/projectdiscovery/wappalyzergo"
+// )
+
+// func main() {
+// 	resp, err := http.DefaultClient.Get("https://www.hackerone.com")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	data, _ := io.ReadAll(resp.Body) // Ignoring error for example
+
+// 	wappalyzerClient, err := wappalyzer.New()
+// 	fingerprintsWithInfo := wappalyzerClient.FingerprintWithInfo(resp.Header, data)
+// 	fmt.Printf("%v\n", fingerprintsWithInfo)
+
+// 	// Output: map[Acquia Cloud Platform:{} Amazon EC2:{} Apache:{} Cloudflare:{} Drupal:{} PHP:{} Percona:{} React:{} Varnish:{}]
+// }
+
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
 	"log"
-	"net/http"
-	"os"
+
+	"github.com/likexian/whois"
+	whoisparser "github.com/likexian/whois-parser"
 )
 
-// Cấu trúc dữ liệu InfoWeb, InfoSubDomain, InfoDomain giống với file JSON của bạn
-type InfoWeb struct {
-	TechnologyDetails map[string]interface{} `json:"technologydetails"`
-	FireWall          string                 `json:"firewall"`
-	Status            string                 `json:"status"`
-	Title             string                 `json:"title"`
-}
-
-type InfoSubDomain struct {
-	NameSubDomain  string             `json:"namesubdomain"`
-	Country        string             `json:"country"`
-	Ips            []string           `json:"ips"`
-	PortAndService map[string]string  `json:"portsandservice"`
-	Os             []string           `json:"os"`
-	HttpOrHttps    map[string]InfoWeb `json:"httporhttps"`
-	CName          []string           `json:"cname"`
-}
-
-type InfoDomain struct {
-	MXRecords  []string                 `json:"mxrecords"`
-	NSRecords  []string                 `json:"nsrecords"`
-	SOARecords []string                 `json:"soarecords"`
-	TXTRecords []string                 `json:"txtrecords"`
-	SubDomain  map[string]InfoSubDomain `json:"subdomain"`
-}
-
-var ListDomain map[string]InfoDomain
-
-// Hàm để đọc file JSON
-func loadJSONFile(fileName string) error {
-	// Đọc file JSON
-	jsonFile, err := os.Open(fileName)
-	if err != nil {
-		return fmt.Errorf("lỗi mở file: %v", err)
-	}
-	defer jsonFile.Close()
-
-	// Đọc nội dung file
-	byteValue, err := io.ReadAll(jsonFile)
-	if err != nil {
-		return fmt.Errorf("lỗi đọc file: %v", err)
-	}
-
-	// Giải mã dữ liệu JSON thành map
-	err = json.Unmarshal(byteValue, &ListDomain)
-	if err != nil {
-		return fmt.Errorf("lỗi giải mã JSON: %v", err)
-	}
-
-	return nil
-}
-
-// Handler cho endpoint trả về dữ liệu JSON
-func jsonHandler(w http.ResponseWriter, r *http.Request) {
-	// Thiết lập header cho response
-	w.Header().Set("Content-Type", "application/json")
-
-	// Chuyển dữ liệu ListDomain sang JSON
-	jsonData, err := json.MarshalIndent(ListDomain, "", "  ")
-	if err != nil {
-		http.Error(w, "Không thể chuyển dữ liệu sang JSON", http.StatusInternalServerError)
-		return
-	}
-
-	// Gửi dữ liệu JSON về client
-	w.Write(jsonData)
-}
-
 func main() {
-	// Đọc file JSON "linh.json"
-	err := loadJSONFile("list_domain.json")
+	ip := "dichvucong.gov.vn" // Địa chỉ IP hoặc tên miền cần tra cứu
+
+	// Thực hiện tra cứu thông tin WHOIS
+	result, err := whois.Whois(ip)
 	if err != nil {
-		log.Fatalf("Lỗi tải file JSON: %v", err)
+		log.Fatalf("Lỗi khi tra cứu WHOIS: %v", err)
 	}
 
-	// Khởi tạo HTTP server ở cổng 8080
-	http.HandleFunc("/data", jsonHandler)
-
-	fmt.Println("Server chạy tại http://localhost:8080/data")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		log.Fatalf("Không thể khởi chạy server: %v", err)
+	// Phân tích kết quả WHOIS
+	parsedResult, err := whoisparser.Parse(result)
+	if err != nil {
+		log.Fatalf("Lỗi khi phân tích kết quả WHOIS: %v", err)
 	}
+
+	// Hiển thị các thông tin quan trọng
+	fmt.Printf("Domain: %s\n", parsedResult.Domain.Domain)
+	fmt.Printf("Registrar: %s\n", parsedResult.Registrar.Name)
+	fmt.Printf("Country: %s\n", parsedResult.Registrant.Country)
+	fmt.Printf("Creation Date: %s\n", parsedResult.Domain.CreatedDate)
+	fmt.Printf("Expiration Date: %s\n", parsedResult.Domain.ExpirationDate)
 }
