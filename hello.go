@@ -2183,11 +2183,12 @@
 // 	// Khởi tạo HTTP server ở cổng 8080
 // 	http.HandleFunc("/data", jsonHandler)
 
-//		fmt.Println("Server chạy tại http://localhost:8080/data")
-//		if err := http.ListenAndServe(":8080", nil); err != nil {
-//			log.Fatalf("Không thể khởi chạy server: %v", err)
-//		}
-//	}
+// 	fmt.Println("Server chạy tại http://localhost:8080/data")
+// 	if err := http.ListenAndServe(":8080", nil); err != nil {
+// 		log.Fatalf("Không thể khởi chạy server: %v", err)
+// 	}
+// }
+
 // package main
 
 // import (
@@ -2286,35 +2287,882 @@
 // 	// Output: map[Acquia Cloud Platform:{} Amazon EC2:{} Apache:{} Cloudflare:{} Drupal:{} PHP:{} Percona:{} React:{} Varnish:{}]
 // }
 
+// package main
+
+// import (
+// 	"fmt"
+// 	"log"
+
+// 	"github.com/likexian/whois"
+// 	whoisparser "github.com/likexian/whois-parser"
+// )
+
+// func main() {
+// 	ip := "dichvucong.gov.vn" // Địa chỉ IP hoặc tên miền cần tra cứu
+
+// 	// Thực hiện tra cứu thông tin WHOIS
+// 	result, err := whois.Whois(ip)
+// 	if err != nil {
+// 		log.Fatalf("Lỗi khi tra cứu WHOIS: %v", err)
+// 	}
+
+// 	// Phân tích kết quả WHOIS
+// 	parsedResult, err := whoisparser.Parse(result)
+// 	if err != nil {
+// 		log.Fatalf("Lỗi khi phân tích kết quả WHOIS: %v", err)
+// 	}
+
+//		// Hiển thị các thông tin quan trọng
+//		fmt.Printf("Domain: %s\n", parsedResult.Domain.Domain)
+//		fmt.Printf("Registrar: %s\n", parsedResult.Registrar.Name)
+//		fmt.Printf("Country: %s\n", parsedResult.Registrant.Country)
+//		fmt.Printf("Creation Date: %s\n", parsedResult.Domain.CreatedDate)
+//		fmt.Printf("Expiration Date: %s\n", parsedResult.Domain.ExpirationDate)
+//	}
+// package main
+
+// import (
+// 	"context"
+
+// 	nuclei "github.com/projectdiscovery/nuclei/v3/lib"
+// )
+
+//	func main() {
+//		ne, err := nuclei.NewNucleiEngineCtx(context.Background(),
+//			nuclei.WithTemplateFilters(nuclei.TemplateFilters{Tags: []string{"oast"}}),
+//			nuclei.EnableStatsWithOpts(nuclei.StatsOptions{MetricServerPort: 6064}), // optionally enable metrics server for better observability
+//		)
+//		if err != nil {
+//			panic(err)
+//		}
+//		// load targets and optionally probe non http/https targets
+//		ne.LoadTargets([]string{"http://honey.scanme.sh"}, false)
+//		err = ne.ExecuteWithCallback(nil)
+//		if err != nil {
+//			panic(err)
+//		}
+//		defer ne.Close()
+//	}
+// package main
+
+// import (
+// 	"fmt"
+// 	"os"
+// 	"time"
+
+// 	"github.com/jedib0t/go-pretty/table"
+// )
+
+// type URLInfo struct {
+// 	Loc        string
+// 	StatusCode int
+// 	LastMod    string
+// 	Changefreq string
+// 	Priority   string
+// }
+
+// func displaySitemap(urlsInfo []URLInfo) {
+// 	t := table.NewWriter()
+// 	t.SetOutputMirror(os.Stdout)
+// 	t.AppendHeader(table.Row{"URL", "STATUS", "LAST MODIFIED", "CHANGEFREQ", "PRIORITY"})
+
+// 	// Render bảng lần đầu
+// 	//t.Render()
+
+// 	// Thêm từng URL vào bảng theo thời gian thực
+// 	for _, urlInfo := range urlsInfo {
+// 		time.Sleep(1 * time.Second) // Giả lập thêm dữ liệu theo thời gian thực
+
+// 		status := fmt.Sprintf("%d", urlInfo.StatusCode)
+// 		if urlInfo.StatusCode == 0 {
+// 			status = "N/A"
+// 		}
+
+// 		// Thêm hàng mới vào bảng
+// 		t.AppendRows([]table.Row{
+// 			{urlInfo.Loc, status, urlInfo.LastMod, urlInfo.Changefreq, urlInfo.Priority},
+// 		})
+
+// 		// Clear màn hình và render lại bảng
+// 		fmt.Print("\033[H\033[J") // Clear màn hình
+// 		t.Render()
+// 	}
+
+// 	// Đợi người dùng nhấn phím trước khi thoát
+// 	fmt.Println("Press Enter to continue...")
+// 	fmt.Scanln() // Đợi nhấn Enter
+// }
+
+// func main() {
+// 	// Dữ liệu mẫu
+// 	urls := []URLInfo{
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", "0.8"},
+// 		{"h tXtps://example.com/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.com/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.com/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.coqwem/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.com/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.cqweom/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.com/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.com/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.cowqem/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.com/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.com/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.comw/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.com/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.coms/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.com/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.cwqm/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 		{"h tXtps://example.com/page2", 404, "2023-09-25", "weekly", "0.5"},
+// 	}
+
+// 	displaySitemap(urls)
+// }
+
+// package main
+
+// import (
+// 	"fmt"
+// 	"os"
+// 	"time"
+
+// 	"github.com/olekukonko/tablewriter"
+// )
+
+// type URLInfo struct {
+// 	Loc        string
+// 	StatusCode int
+// 	LastMod    string
+// 	Changefreq string
+// 	Priority   string
+// }
+
+// type Analysis struct {
+// 	TotalURLs  int
+// 	UniqueURLs int
+// 	BrokenURLs int
+// }
+
+// func moveCursorToStart() {
+// 	// Di chuyển con trỏ về vị trí đầu tiên (1,1) bằng escape sequence
+// 	fmt.Print("\033[H")
+// }
+
+// func clearScreen() {
+// 	// Xóa toàn bộ màn hình
+// 	fmt.Print("\033[2J")
+// }
+
+// func displaySitemap(urlsInfo []URLInfo, analysis Analysis) {
+// 	// Tạo bảng mới và thêm header
+// 	table := tablewriter.NewWriter(os.Stdout)
+// 	table.SetHeader([]string{"URL", "Status", "Last Modified", "Changefreq", "Priority"})
+
+// 	// Set styles
+// 	table.SetHeaderColor(
+// 		tablewriter.Colors{tablewriter.Bold, tablewriter.FgMagentaColor},
+// 		tablewriter.Colors{tablewriter.FgCyanColor},
+// 		tablewriter.Colors{tablewriter.FgYellowColor},
+// 		tablewriter.Colors{tablewriter.FgBlueColor},
+// 		tablewriter.Colors{tablewriter.FgRedColor},
+// 	)
+// 	table.SetColumnColor(
+// 		tablewriter.Colors{tablewriter.FgGreenColor},
+// 		tablewriter.Colors{tablewriter.FgCyanColor},
+// 		tablewriter.Colors{tablewriter.FgYellowColor},
+// 		tablewriter.Colors{tablewriter.FgBlueColor},
+// 		tablewriter.Colors{tablewriter.FgRedColor},
+// 	)
+
+// 	// Lưu lại vị trí ban đầu của con trỏ
+// 	// clearScreen()
+// 	// moveCursorToStart()
+
+// 	// Thêm từng dòng cho mỗi URL
+// 	for _, urlInfo := range urlsInfo {
+// 		status := fmt.Sprintf("%d", urlInfo.StatusCode)
+// 		if urlInfo.StatusCode == 0 {
+// 			status = "N/A"
+// 		}
+
+// 		// Add row
+// 		table.Append([]string{
+// 			urlInfo.Loc,
+// 			status,
+// 			urlInfo.LastMod,
+// 			urlInfo.Changefreq,
+// 			urlInfo.Priority,
+// 		})
+
+// 		// Di chuyển con trỏ về vị trí ban đầu và render bảng
+
+// 	}
+// 	//moveCursorToStart()
+// 	table.Render()
+
+// 	// Đợi một chút để quan sát sự thay đổi
+// 	time.Sleep(1 * time.Second)
+// 	// Hiển thị thông tin phân tích cuối cùng
+// 	fmt.Println()
+// 	fmt.Printf("Total URLs: %d\n", analysis.TotalURLs)
+// 	fmt.Printf("Unique URLs: %d\n", analysis.UniqueURLs)
+// 	fmt.Printf("Broken URLs: %d\n", analysis.BrokenURLs)
+// }
+
+// func main() {
+// 	urls := []URLInfo{
+// 		{Loc: "https://example.com/page1", StatusCode: 200, LastMod: "2023-10-01", Changefreq: "dailády", Priority: "0.8"},
+// 		{Loc: "https://example.com/page1", StatusCode: 200, LastMod: "2023-10-01", Changefreq: "dfwefaily", Priority: "0.8"},
+// 		{Loc: "https://example.cosadasdm/page1", StatusCode: 200, LastMod: "2023-10-01", Changefreq: "daily", Priority: "0.8"},
+// 		{Loc: "https://example.com/dqwdqpage1", StatusCode: 200, LastMod: "2023-10-01", Changefreq: "daiwefly", Priority: "0.8"},
+// 		{Loc: "https://example.coấm/page1", StatusCode: 200, LastMod: "2023-10-01", Changefreq: "daiely", Priority: "0.8"},
+// 		{Loc: "https://example.com/page1", StatusCode: 2060, LastMod: "2023-10-01", Changefreq: "daily", Priority: "0.8"},
+// 		{Loc: "https://example.com/pádage1", StatusCode: 200, LastMod: "2023-10-01", Changefreq: "dafeily", Priority: "0.8"},
+// 		{Loc: "https://example.comđá/page1", StatusCode: 200, LastMod: "2023-10-01", Changefreq: "daeily", Priority: "0.8"},
+// 		{Loc: "https://example.com/page1", StatusCode: 200, LastMod: "2023-10-01", Changefreq: "dailwfy", Priority: "0.8"},
+// 		// {Loc: "https://example.comád/page1", StatusCode: 200, LastMod: "2023-10-01", Changefreq: "daidddddddlqy", Priority: "0.8"},
+// 		// {Loc: "https://example.comád/page2", StatusCode: 404, LastMod: "2023-09-25", Changefreq: "weekly", Priority: "0.5"},
+// 	}
+
+// 	analysis := Analysis{TotalURLs: 2, UniqueURLs: 2, BrokenURLs: 1}
+// 	displaySitemap(urls, analysis)
+// }
+
+// package main
+
+// import (
+// 	"fmt"
+// 	"os"
+// 	"time"
+
+// 	"github.com/inancgumus/screen"
+// 	"github.com/olekukonko/tablewriter"
+// )
+
+// type URLInfo struct {
+// 	Loc        string
+// 	StatusCode int
+// 	LastMod    string
+// 	Changefreq string
+// 	Priority   string
+// }
+
+// type Analysis struct {
+// 	TotalURLs  int
+// 	UniqueURLs int
+// 	BrokenURLs int
+// }
+
+// func displaySitemap(urlsInfo []URLInfo, analysis Analysis) {
+// 	screen.Clear() // Xóa màn hình
+// 	screen.MoveTopLeft()
+
+// 	table := tablewriter.NewWriter(os.Stdout)
+// 	table.SetHeader([]string{"URL", "Status", "Last Modified", "Changefreq", "Priority"})
+
+// 	for _, urlInfo := range urlsInfo {
+// 		status := fmt.Sprintf("%d", urlInfo.StatusCode)
+// 		if urlInfo.StatusCode == 0 {
+// 			status = "N/A"
+// 		}
+// 		table.Append([]string{urlInfo.Loc, status, urlInfo.LastMod, urlInfo.Changefreq, urlInfo.Priority})
+
+// 		screen.Clear() // Xóa màn hình trước khi in lại
+// 		screen.MoveTopLeft()
+// 		table.Render() // In lại bảng
+
+// 		// Hiển thị thông tin phân tích
+// 		fmt.Printf("\nTotal URLs: %d\n", analysis.TotalURLs)
+// 		fmt.Printf("Unique URLs: %d\n", analysis.UniqueURLs)
+// 		fmt.Printf("Broken URLs: %d\n", analysis.BrokenURLs)
+
+// 		time.Sleep(1 * time.Second) // Dừng một giây trước khi cập nhật tiếp
+// 	}
+// }
+
+// func main() {
+// 	// Dữ liệu mẫu
+// 	urlsInfo := []URLInfo{
+// 		{"https://example.com", 200, "2023-10-01", "daily", "0.8"},
+// 		{"https://example.org", 404, "2023-09-30", "weekly", "0.5"},
+// 		{"https://example.org", 404, "2023-09-30", "weekly", "0.5"},
+// 		{"https://example.org", 404, "2023-09-30", "weekly", "0.5"},
+// 		{"https://example.org", 404, "2023-09-30", "weekly", "0.5"},
+// 		{"https://example.org", 404, "2023-09-30", "weekly", "0.5"},
+// 		{"https://example.org", 404, "2023-09-30", "weekly", "0.5"},
+// 		{"https://example.org", 404, "2023-09-30", "weekly", "0.5"},
+// 		{"https://example.org", 404, "2023-09-30", "weekly", "0.5"},
+// 		{"https://example.org", 404, "2023-09-30", "weekly", "0.5"},
+// 		{"https://example.org", 404, "2023-09-30", "weekly", "0.5"},
+// 	}
+
+// 	analysis := Analysis{
+// 		TotalURLs:  2,
+// 		UniqueURLs: 2,
+// 		BrokenURLs: 1,
+// 	}
+
+//		// Hiển thị bảng
+//		displaySitemap(urlsInfo, analysis)
+//	}
+// package main
+
+// import (
+// 	"fmt"
+// 	"log"
+// 	"os"
+// 	"time"
+
+// 	ui "github.com/gizak/termui/v3"
+// 	"github.com/gizak/termui/v3/widgets"
+// )
+
+// type URLInfo struct {
+// 	URL          string
+// 	Status       int
+// 	LastModified string
+// 	ChangeFreq   string
+// 	Priority     float64
+// }
+
+// func displaySitemap(urlsInfo []URLInfo, analysis map[string]int) {
+// 	if err := ui.Init(); err != nil {
+// 		log.Fatalf("failed to initialize termui: %v", err)
+// 	}
+// 	defer ui.Close()
+
+// 	table := widgets.NewTable()
+// 	table.Rows = [][]string{
+// 		{"URL", "Status", "Last Modified", "Changefreq", "Priority"},
+// 	}
+
+// 	// Thiết lập bảng
+// 	table.TextStyle = ui.NewStyle(ui.ColorWhite)
+// 	table.RowSeparator = true
+// 	table.SetRect(0, 0, 70, 5)
+
+// 	for _, url := range urlsInfo {
+// 		// Cập nhật bảng
+// 		//table.Append([]string{urlInfo.Loc, status, urlInfo.LastMod, urlInfo.Changefreq, urlInfo.Priority})
+// 		table.Rows = append(table.Rows, []string{
+// 			url.URL,
+// 			string(url.Status),
+// 			url.LastModified,
+// 			url.ChangeFreq,
+// 			fmt.Sprintf("%.1f", url.Priority),
+// 		})
+// 		table.SetRect(0, 0, 70, 7)
+
+// 		// In ra bảng
+// 		ui.Render(table)
+// 		time.Sleep(1 * time.Second)
+// 	}
+// 	// Press Enter to continue
+// 	//fmt.Print("Press Enter to continue...")
+// 	os.Stdin.Read(make([]byte, 1))
+// }
+
+// func main() {
+// 	urlsInfo := []URLInfo{
+// 		{"https://examdddddddddddddple.com/bpage1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://examplbe.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.cobm/ffffffffffffffffpage1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.cbom/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.cobm/page1", 200, "2023-10-01", "daily", 0.8},
+// 	}
+// 	analysis := map[string]int{
+// 		"TotalURLs":  2,
+// 		"UniqueURLs": 2,
+// 		"BrokenURLs": 1,
+// 	}
+// 	displaySitemap(urlsInfo, analysis)
+// }
+
+// package main
+
+// import (
+// 	"fmt"
+// 	"os"
+// 	"time"
+// )
+
+// type URLInfo struct {
+// 	URL          string
+// 	Status       int
+// 	LastModified string
+// 	ChangeFreq   string
+// 	Priority     float64
+// }
+
+// func main() {
+// 	urls := []URLInfo{
+// 		{"https://example.cogm/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/bpage1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://examplbe.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.cobm/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.cbom/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.cobm/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.cbom/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", 0.8},
+// 		{"https://example.com/page2", 404, "2023-09-25", "weekly", 0.5},
+// 		// Add more URLInfo as needed
+// 	}
+
+// 	// Create a map to track seen URLs and avoid duplicates
+// 	//seen := make(map[string]bool)
+
+// 	// Print table header
+// 	fmt.Println("+--------------------------------+--------+---------------+------------+----------+")
+// 	fmt.Println("| URL                            | STATUS | LAST MODIFIED | CHANGEFREQ | PRIORITY |")
+// 	fmt.Println("+--------------------------------+--------+---------------+------------+----------+")
+
+// 	for _, urlInfo := range urls {
+// 		// Check for duplicates
+// 		//if !seen[urlInfo.URL] {
+// 		//	seen[urlInfo.URL] = true
+// 		fmt.Printf("| %-30s | %-6d | %-13s | %-10s | %-8.1f |\n", urlInfo.URL, urlInfo.Status, urlInfo.LastModified, urlInfo.ChangeFreq, urlInfo.Priority)
+// 		fmt.Println("+--------------------------------+--------+---------------+------------+----------+")
+// 		//}
+// 		time.Sleep(time.Millisecond)
+// 	}
+
+//		// Press Enter to continue
+//		fmt.Print("Press Enter to continue...")
+//		os.Stdin.Read(make([]byte, 1))
+//	}
+// package main
+
+// import "fmt"
+
+//	func main() {
+//		for false {
+//			fmt.Println("1")
+//		}
+//	}
+// package main
+
+// import (
+// 	"fmt"
+// )
+
+// // URLInfo lưu thông tin cho mỗi URL
+// type URLInfo struct {
+// 	Loc        string
+// 	StatusCode int
+// 	LastMod    string
+// 	Changefreq string
+// 	Priority   string
+// }
+
+// // Analysis lưu thông tin phân tích
+// type Analysis struct {
+// 	TotalURLs  int
+// 	UniqueURLs int
+// 	BrokenURLs int
+// }
+
+// // Hàm chia nhỏ chuỗi thành nhiều dòng nếu dài hơn maxLength
+// func wrapString(s string, maxLength int) []string {
+// 	var result []string
+// 	for len(s) > maxLength {
+// 		result = append(result, s[:maxLength])
+// 		s = s[maxLength:]
+// 	}
+// 	if len(s) > 0 {
+// 		result = append(result, s) // Thêm phần còn lại
+// 	}
+// 	return result
+// }
+
+// // Hàm hiển thị sitemap
+// func displaySitemap(urlsInfo []URLInfo, analysis Analysis) {
+// 	// Tạo header cho bảng
+// 	fmt.Print("+---------------------------------+--------+---------------+------------+----------+\n")
+// 	fmt.Print("|               URL               | STATUS | LAST MODIFIED | CHANGEFREQ | PRIORITY |\n")
+// 	fmt.Print("+---------------------------------+--------+---------------+------------+----------+\n")
+
+// 	// Thêm từng dòng cho mỗi URL
+// 	for _, urlInfo := range urlsInfo {
+// 		status := fmt.Sprintf("%d", urlInfo.StatusCode)
+// 		if urlInfo.StatusCode == 0 {
+// 			status = "N/A"
+// 		}
+
+// 		// Chia nhỏ các giá trị nếu cần
+// 		wrappedURL := wrapString(urlInfo.Loc, 33)
+// 		wrappedLastMod := wrapString(urlInfo.LastMod, 13)
+// 		wrappedChangefreq := wrapString(urlInfo.Changefreq, 10)
+// 		wrappedPriority := wrapString(urlInfo.Priority, 8)
+
+// 		// In ra các dòng cho URL
+// 		for i, urlPart := range wrappedURL {
+// 			// Chỉ in ra dòng đầu tiên của URL với các giá trị khác
+// 			if i == 0 {
+// 				fmt.Printf("| %-33s | %-6s | %-13s | %-10s | %-8s |\n",
+// 					urlPart, status,
+// 					" ", " ", " ")
+// 			} else {
+// 				// In ra các dòng tiếp theo chỉ với URL
+// 				fmt.Printf("| %-33s | %-6s | %-13s | %-10s | %-8s |\n",
+// 					urlPart, " ",
+// 					" ", " ", " ")
+// 			}
+// 			fmt.Print("+---------------------------------+--------+---------------+------------+----------+\n")
+// 		}
+
+// 		// In ra các giá trị còn lại
+// 		// LAST MODIFIED
+// 		for i, lastModPart := range wrappedLastMod {
+// 			if i == 0 {
+// 				fmt.Printf("| %-33s | %-6s | %-13s | %-10s | %-8s |\n",
+// 					" ", status, lastModPart, " ", " ")
+// 			} else {
+// 				fmt.Printf("| %-33s | %-6s | %-13s | %-10s | %-8s |\n",
+// 					" ", " ", lastModPart, " ", " ")
+// 			}
+// 			fmt.Print("+---------------------------------+--------+---------------+------------+----------+\n")
+// 		}
+
+// 		// CHANGEFREQ
+// 		for i, changefreqPart := range wrappedChangefreq {
+// 			if i == 0 {
+// 				fmt.Printf("| %-33s | %-6s | %-13s | %-10s | %-8s |\n",
+// 					" ", status, " ", changefreqPart, " ")
+// 			} else {
+// 				fmt.Printf("| %-33s | %-6s | %-13s | %-10s | %-8s |\n",
+// 					" ", " ", " ", changefreqPart, " ")
+// 			}
+// 			fmt.Print("+---------------------------------+--------+---------------+------------+----------+\n")
+// 		}
+
+// 		// PRIORITY
+// 		for i, priorityPart := range wrappedPriority {
+// 			if i == 0 {
+// 				fmt.Printf("| %-33s | %-6s | %-13s | %-10s | %-8s |\n",
+// 					" ", status, " ", " ", priorityPart)
+// 			} else {
+// 				fmt.Printf("| %-33s | %-6s | %-13s | %-10s | %-8s |\n",
+// 					" ", " ", " ", " ", priorityPart)
+// 			}
+// 			fmt.Print("+---------------------------------+--------+---------------+------------+----------+\n")
+// 		}
+
+// 		// Thêm một dòng trống giữa các URL
+// 		fmt.Print("\n")
+// 	}
+
+// 	// Hiển thị thông tin phân tích
+// 	fmt.Printf("Total URLs: %d\n", analysis.TotalURLs)
+// 	fmt.Printf("Unique URLs: %d\n", analysis.UniqueURLs)
+// 	fmt.Printf("Broken URLs: %d\n", analysis.BrokenURLs)
+// }
+
+// func main() {
+// 	// Dữ liệu mẫu
+// 	urlsInfo := []URLInfo{
+// 		{"https://example.com/page1", 200, "2023-10-01", "daily", "0.8"},
+// 		{"https://example.com/page2", 404, "2023-10-01", "weekly", "0.6"},
+// 		{"https://example.com/pagggggadsdga", 200, "2023-10-01", "monthly", "0.4"},
+// 		{"https://example.com/anotherlongurlthatshouldwrap", 200, "2022-12-05", "monthly", "0.4"},
+// 	}
+
+// 	analysis := Analysis{
+// 		TotalURLs:  len(urlsInfo),
+// 		UniqueURLs: len(urlsInfo), // Giả định là tất cả đều unique
+// 		BrokenURLs: 1,             // Giả định có 1 broken URL
+// 	}
+
+//		// Hiển thị sitemap
+//		displaySitemap(urlsInfo, analysis)
+//	}
+// package main
+
+// import (
+// 	"fmt"
+// 	"os"
+// )
+
+//	func main() {
+//		// for i := 1; i < 100; i++ {
+//		// 	fmt.Println("11111111111111111111111111 ")
+//		// 	fmt.Println("end " + strconv.Itoa(i))
+//		// 	fmt.Println("end " + strconv.Itoa(i))
+//		// 	fmt.Println("end " + strconv.Itoa(i))
+//		// 	fmt.Println("end " + strconv.Itoa(i))
+//		// 	fmt.Print("\033[F")
+//		// 	fmt.Print("\033[F")
+//		// 	fmt.Print("\033[F")
+//		// 	fmt.Print("\033[F")
+//		// 	// Thêm các ô khác...
+//		// 	time.Sleep(1 * time.Second)
+//		// }
+//		fmt.Fprintf(os.Stderr, "%-15s : %s\n", "đâsdasdasd", "dsaasd")
+//		fmt.Fprintf(os.Stderr, "%-15s : %s\n", "dsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "dsaasd")
+//	}
+
+// func wrapText(value string, maxWidth int) []string {
+// 	var result []string
+// 	words := strings.Fields(value) // Chia chuỗi thành các từ
+// 	currentLine := ""
+
+// 	for _, word := range words {
+// 		// Nếu thêm từ này vào dòng hiện tại sẽ vượt quá maxWidth
+// 		if len(currentLine)+len(word)+1 > maxWidth {
+// 			result = append(result, strings.TrimSpace(currentLine)) // Thêm dòng hiện tại vào kết quả
+// 			currentLine = word                                      // Bắt đầu dòng mới với từ hiện tại
+// 		} else {
+// 			currentLine += " " + word // Thêm từ vào dòng hiện tại
+// 		}
+// 	}
+
+// 	// Thêm dòng cuối cùng vào kết quả
+// 	if currentLine != "" {
+// 		result = append(result, strings.TrimSpace(currentLine))
+// 	}
+
+// 	return result
+// }
+
+// func printWithWrap(label string, value string, labelWidth int, valueWidth int) {
+// 	// In dòng đầu tiên
+// 	fmt.Fprintf(os.Stderr, "%-*s : %s\n", labelWidth, label, value)
+
+// 	// Tạo các dòng còn lại cho value nếu nó dài hơn valueWidth
+// 	wrappedLines := wrapText(value, valueWidth)
+// 	for i := 1; i < len(wrappedLines); i++ {
+// 		fmt.Fprintf(os.Stderr, "%-*s : %s\n", labelWidth, "", wrappedLines[i]) // Căn chỉnh với khoảng trắng
+// 	}
+// }
+
+// package main
+
+// import (
+// 	"fmt"
+// 	"io"
+// 	"log"
+// 	"net/http"
+
+// 	wappalyzer "github.com/projectdiscovery/wappalyzergo"
+// )
+
+// func main() {
+// 	resp, err := http.DefaultClient.Get("https://www.hackerone.com")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	data, _ := io.ReadAll(resp.Body) // Ignoring error for example
+
+// 	wappalyzerClient, err := wappalyzer.New()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	fingerprints := wappalyzerClient.Fingerprint(resp.Header, data)
+// 	fmt.Printf("%v\n", fingerprints)
+// 	// Output: map[Acquia Cloud Platform:{} Amazon EC2:{} Apache:{} Cloudflare:{} Drupal:{} PHP:{} Percona:{} React:{} Varnish:{}]
+
+// 	fingerprintsWithCats := wappalyzerClient.FingerprintWithCats(resp.Header, data)
+// 	fmt.Printf("%v\n", fingerprintsWithCats)
+
+//		fingerprintsWithInfo := wappalyzerClient.FingerprintWithInfo(resp.Header, data)
+//		fmt.Printf("%v\n", fingerprintsWithInfo)
+//	}
+// package main
+
+// import (
+// 	"context"
+
+// 	nuclei "github.com/projectdiscovery/nuclei/v3/lib"
+// 	"github.com/projectdiscovery/nuclei/v3/pkg/installer"
+// 	"github.com/projectdiscovery/nuclei/v3/pkg/output"
+// 	"golang.org/x/tools/internal/event"
+// )
+
+// func main() {
+// 	ctx := context.Background()
+// 	// when running nuclei in parallel for first time it is a good practice to make sure
+// 	// templates exists first
+// 	tm := installer.TemplateManager{}
+// 	if err := tm.FreshInstallIfNotExists(); err != nil {
+// 		panic(err)
+// 	}
+
+// 	// create nuclei engine with options
+// 	//ne, err := nuclei.NewThreadSafeNucleiEngineCtx(ctx)
+// 	ne, err := nuclei.NewNucleiEngineCtx(ctx,
+// 		nuclei.WithTemplateFilters(nuclei.TemplateFilters{}),
+// 		//nuclei.WithVerbosity(nuclei.VerbosityOptions{Verbose: true}),
+// 	)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	// load targets and optionally probe non http/https targets
+// 	ne.LoadTargets([]string{"hackerone.com"}, false)
+// 	// when callback is nil it nuclei will print JSON output to stdout
+// 	err = ne.ExecuteCallbackWithCtx(ctx, func(event *output.ResultEvent) {
+// 		//fmt.Printf("[%s:%s] [%s] %s [%s]\n", event.TemplateID, event.Info.Name, event.Type, event.Host, event.ExtractedResults)
+// 	})
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	defer ne.Close()
+// 	// Output:
+// 	// [dns-saas-service-detection] scanme.sh
+// 	// [nameserver-fingerprint] scanme.sh
+// 	// [dns-saas-service-detection] honey.scanme.sh
+// }
+
 package main
 
 import (
+	"context"
 	"fmt"
-	"log"
+	"os"
 
-	"github.com/likexian/whois"
-	whoisparser "github.com/likexian/whois-parser"
+	nuclei "github.com/projectdiscovery/nuclei/v3/lib"
+	"github.com/projectdiscovery/nuclei/v3/pkg/output"
+	"github.com/remeh/sizedwaitgroup"
 )
 
 func main() {
-	ip := "dichvucong.gov.vn" // Địa chỉ IP hoặc tên miền cần tra cứu
-
-	// Thực hiện tra cứu thông tin WHOIS
-	result, err := whois.Whois(ip)
+	// Mở file để ghi, nếu file không tồn tại thì tạo mới, với quyền ghi và đọc
+	file, err := os.OpenFile("testnuclei.txt", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
-		log.Fatalf("Lỗi khi tra cứu WHOIS: %v", err)
+		fmt.Println("OpenFile")
 	}
+	defer file.Close()
 
-	// Phân tích kết quả WHOIS
-	parsedResult, err := whoisparser.Parse(result)
+	ctx := context.Background()
+	// create nuclei engine with options
+	ne, err := nuclei.NewThreadSafeNucleiEngineCtx(ctx)
 	if err != nil {
-		log.Fatalf("Lỗi khi phân tích kết quả WHOIS: %v", err)
+		panic(err)
 	}
+	ne.GlobalLoadAllTemplates()
+	// setup sizedWaitgroup to handle concurrency
+	// here we are using sizedWaitgroup to limit concurrency to 1
+	// but can be anything in general
+	sg := sizedwaitgroup.New(1)
 
-	// Hiển thị các thông tin quan trọng
-	fmt.Printf("Domain: %s\n", parsedResult.Domain.Domain)
-	fmt.Printf("Registrar: %s\n", parsedResult.Registrar.Name)
-	fmt.Printf("Country: %s\n", parsedResult.Registrant.Country)
-	fmt.Printf("Creation Date: %s\n", parsedResult.Domain.CreatedDate)
-	fmt.Printf("Expiration Date: %s\n", parsedResult.Domain.ExpirationDate)
+	// scan 2 = run dns templates on honey.scanme.sh
+	sg.Add()
+	go func() {
+		defer sg.Done()
+		err = ne.ExecuteNucleiWithOptsCtx(ctx, []string{"docs.hackerone.com", "honey.scanme.sh"},
+			nuclei.WithTemplateFilters(nuclei.TemplateFilters{}),
+		)
+
+		if err != nil {
+			panic(err)
+		}
+	}()
+	ne.GlobalResultCallback(func(event *output.ResultEvent) {
+		// Ghi dữ liệu vào file
+		_, err = file.WriteString(event.Host + event.TemplateID)
+		if err != nil {
+			fmt.Println("WriteString")
+		}
+		fmt.Printf("\r Host: %s\n", event.Host)
+		fmt.Printf("\r TemplateID: %s\n", event.TemplateID)
+		fmt.Printf("\r ExtractorName: %s\n", event.ExtractorName)
+		fmt.Printf("\r Matched: %s\n", event.Matched)
+		fmt.Printf("\r MatcherName: %s\n", event.MatcherName)
+		fmt.Printf("\r Type: %s\n", event.Type)
+		fmt.Printf("\r Name: %s\n", event.Info.Name)
+		if len(event.Info.Description) > 0 {
+			fmt.Printf("\r Description: %s\n", event.Info.Description)
+		}
+
+		if len(event.Info.SeverityHolder.Severity.String()) > 0 {
+			fmt.Printf("\r Severity: %s\n", event.Info.SeverityHolder.Severity)
+		}
+
+		if len(event.ExtractedResults) > 0 {
+			fmt.Printf("\rExtracted Results: %v\n", event.ExtractedResults)
+		}
+		fmt.Printf("\r Classification: %v\n", event.Info.Classification)
+		fmt.Printf("\r ********: \n")
+	})
+	// wait for all scans to finish
+	sg.Wait()
+	defer ne.Close()
+
 }
+
+// ne.GlobalResultCallback(func(event *output.ResultEvent) {
+// 	//fmt.Printf("\r CURLCommand: %s\n", event.CURLCommand)
+// 	//fmt.Printf("\r Error: %s\n", event.Error)
+// 	fmt.Printf("\r ExtractorName: %s\n", event.ExtractorName)
+// 	//fmt.Printf("\r FuzzingMethod: %s\n", event.FuzzingMethod)
+// 	//fmt.Printf("\r FuzzingParameter: %s\n", event.FuzzingParameter)
+// 	//fmt.Printf("\r FuzzingPosition: %s\n", event.FuzzingPosition)
+// 	fmt.Printf("\r Host: %s\n", event.Host)
+// 	fmt.Printf("\r IP: %s\n", event.IP)
+// 	fmt.Printf("\r Matched: %s\n", event.Matched)
+// 	fmt.Printf("\r MatcherName: %s\n", event.MatcherName)
+// 	//fmt.Printf("\r Path: %s\n", event.Path)
+// 	fmt.Printf("\r Port: %s\n", event.Port)
+// 	//fmt.Printf("\r ReqURLPattern: %s\n", event.ReqURLPattern)
+// 	//fmt.Printf("\r Request: %s\n", event.Request)
+// 	// fmt.Printf("\r Response: %s\n", event.Response)
+// 	//fmt.Printf("\r Scheme: %s\n", event.Scheme)
+// 	//fmt.Printf("\r Template: %s\n", event.Template)
+// 	//fmt.Printf("\r TemplateEncoded: %s\n", event.TemplateEncoded)
+// 	fmt.Printf("\r TemplateID: %s\n", event.TemplateID)
+// 	fmt.Printf("\r TemplatePath: %s\n", event.TemplatePath)
+// 	//fmt.Printf("\r TemplateURL: %s\n", event.TemplateURL)
+// 	//fmt.Printf("\r TemplateVerifier: %s\n", event.TemplateVerifier)
+// 	fmt.Printf("\r Type: %s\n", event.Type)
+// 	fmt.Printf("\r URL: %s\n", event.URL)
+// 	//fmt.Printf("\r Authors: %s\n", event.Info.Authors)
+// 	fmt.Printf("\r Name: %s\n", event.Info.Name)
+// 	fmt.Printf("\r Tags: %s\n", event.Info.Tags)
+// 	if len(event.Info.Description) > 0 {
+// 		fmt.Printf("\r Description: %s\n", event.Info.Description)
+// 	}
+// 	//fmt.Printf("\r Impact: %s\n", event.Info.Impact)
+// 	//fmt.Printf("\r Reference: %s\n", event.Info.Reference)
+// 	//fmt.Printf("\r Remediation: %s\n", event.Info.Remediation)
+// 	//fmt.Printf("\r CVEID: %s\n", event.Info.Classification.CVEID)
+// 	if len(event.Info.Reference.StringSlice.String()) > 0 {
+// 		fmt.Printf("\r StringSlice: %s\n", event.Info.Reference.StringSlice)
+// 	}
+// 	if len(event.Info.SeverityHolder.Severity.String()) > 0 {
+// 		fmt.Printf("\r Severity: %s\n", event.Info.SeverityHolder.Severity)
+// 	}
+// 	fmt.Printf("\r Classification: %v\n", event.Info.Classification)
+// 	if len(event.Info.Metadata) > 0 {
+// 		fmt.Printf("\r Metadata: %s\n", event.Info.Metadata)
+// 	}
+// 	//fmt.Printf("\r SeverityHolder: %s\n", event.Info.SeverityHolder)
+// 	//fmt.Printf("\r MatcherStatus: %v\n", event.MatcherStatus)
+// 	if len(event.Metadata) > 0 {
+// 		fmt.Printf("\r Metadata: %s\n", event.Metadata)
+// 	}
+// 	//fmt.Printf("\r Lines: %v\n", event.Lines)
+// 	//fmt.Printf("\r IsFuzzingResult: %v\n", event.IsFuzzingResult)
+// 	if len(event.ExtractedResults) > 0 {
+// 		fmt.Printf("\rExtracted Results: %v\n", event.ExtractedResults)
+// 	}
+// 	fmt.Printf("\r ********: \n")
+// })
